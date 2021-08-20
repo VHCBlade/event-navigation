@@ -1,5 +1,3 @@
-// TODO Deep Navigation
-
 /// This represents a level of subnavigation, usually representing a screen.
 class DeepNavigationNode<T> {
   int level = 0;
