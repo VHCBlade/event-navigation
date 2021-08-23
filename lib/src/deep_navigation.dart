@@ -2,12 +2,10 @@
 class DeepNavigationNode<T> {
   int level = 0;
   final T value;
-  bool Function(T value)? shouldAcceptSubNavigation;
-  DeepNavigationNode? _child;
+  Future<bool> Function(T value)? shouldAcceptSubNavigation;
+  final DeepNavigationNode? child;
 
-  DeepNavigationNode(this.value);
-
-  DeepNavigationNode? get child => _child;
+  DeepNavigationNode(this.value, {this.child});
 
   /// Creates a deep copy of this [DeepNavigationNode]
   DeepNavigationNode createCopy() {
@@ -19,19 +17,20 @@ class DeepNavigationNode<T> {
     return copy;
   }
 
-  /// Will attempt to set the value of [child] if this node is willing to accept it as a subNavigation.
+  /// Will attempt to create a copy of this node with the child set to [newChild]
   ///
-  /// Returns true if it was a success.
-  bool setChild(DeepNavigationNode? newChild) {
+  /// Returns the resulting node if it was successful. Null if it was not allowed.
+  Future<DeepNavigationNode?> setChild(DeepNavigationNode? newChild) async {
     if (newChild != null &&
         shouldAcceptSubNavigation != null &&
-        shouldAcceptSubNavigation!(newChild.value)) {
-      return false;
+        await shouldAcceptSubNavigation!(newChild.value)) {
+      return null;
     }
-    _child = newChild;
     if (newChild != null) {
       newChild.level = level + 1;
     }
-    return true;
+    return DeepNavigationNode(value, child: newChild)..level = level;
   }
+
+  DeepNavigationNode get leaf => child?.leaf ?? this;
 }

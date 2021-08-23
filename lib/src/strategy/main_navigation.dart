@@ -20,7 +20,6 @@ class ListNavigationStrategy<T> implements MainNavigationStrategy<T> {
         navigationOnError = possibleNavigations[0];
 
   @override
-  bool attemptNavigation(T newNavigation) {
-    return possibleNavigations.contains(newNavigation);
-  }
+  bool attemptNavigation(T newNavigation) =>
+      possibleNavigations.contains(newNavigation);
 }

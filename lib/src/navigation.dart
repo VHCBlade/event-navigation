@@ -1,7 +1,8 @@
 import 'package:event_bloc/event_bloc.dart';
+import 'package:event_navigation/event_navigation.dart';
 import 'package:event_navigation/src/event.dart';
 import 'package:event_navigation/src/strategy/main_navigation.dart';
-import 'package:event_navigation/src/strategy/main_navigation_undo.dart';
+import 'package:event_navigation/src/strategy/navigation_undo.dart';
 
 /// This [Bloc] handles the main/top level navigation of this app. Check values in [POSSIBLE_NAVIGATION] for possible main navigation values. You can fire the [MAIN_NAVIGATION_EVENT] and [PREVIOUS_MAIN_NAVIGATION_EVENT] to call the corresponding functions indirectly.
 ///
@@ -10,7 +11,11 @@ class MainNavigationBloc<T> extends Bloc {
   @override
   final BlocEventChannel eventChannel;
   final MainNavigationStrategy<T> strategy;
-  final MainNavigationUndoStrategy<T> undoStrategy;
+  final NavigationUndoStrategy<T> undoStrategy;
+
+  final deepNavigationStrategyMap = <T, DeepNavigationStrategy>{};
+  final deepNavigationMap = <T, DeepNavigationNode<T>>{};
+
   T currentMainNavigation;
 
   MainNavigationBloc({
