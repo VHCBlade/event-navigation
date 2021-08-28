@@ -8,13 +8,13 @@ class FullScreenCarousel extends StatefulWidget {
   final Function(int)? onManualPageChange;
   final bool withSafeAreaPadding;
 
-  const FullScreenCarousel(
-      {Key? key,
-      this.controller,
-      this.withSafeAreaPadding = false,
-      required this.items,
-      this.onManualPageChange})
-      : super(key: key);
+  const FullScreenCarousel({
+    Key? key,
+    this.controller,
+    this.withSafeAreaPadding = false,
+    required this.items,
+    this.onManualPageChange,
+  }) : super(key: key);
 
   @override
   State<FullScreenCarousel> createState() => _FullScreenCarouselState();
@@ -29,23 +29,6 @@ class _FullScreenCarouselState extends State<FullScreenCarousel> {
     controller = widget.controller ?? CarouselController();
   }
 
-  /// Calculates the aspect ratio of the currently available viewport, to make the carousel take the entire screen.
-  double calculateAspectRatio(BuildContext context) {
-    final data = MediaQuery.of(context);
-
-    final topPadding = widget.withSafeAreaPadding
-        ? 0
-        : data.padding.top + data.viewPadding.top + data.viewInsets.top;
-
-    final value = data.size.width /
-        (data.size.height -
-            topPadding -
-            data.padding.left -
-            data.padding.right);
-
-    return value;
-  }
-
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
@@ -55,7 +38,7 @@ class _FullScreenCarouselState extends State<FullScreenCarousel> {
           autoPlay: false,
           viewportFraction: 1,
           enableInfiniteScroll: false,
-          aspectRatio: calculateAspectRatio(context),
+          height: MediaQuery.of(context).size.height,
           enlargeCenterPage: true,
           onPageChanged: (val, CarouselPageChangedReason reason) {
             if (reason != CarouselPageChangedReason.manual) {

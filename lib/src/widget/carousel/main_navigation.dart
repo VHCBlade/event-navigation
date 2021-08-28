@@ -8,12 +8,12 @@ class MainNavigationFullScreenCarousel<T> extends StatefulWidget {
   final Widget Function(BuildContext, T) navigationBuilder;
   final bool withSafeAreaPadding;
 
-  const MainNavigationFullScreenCarousel(
-      {Key? key,
-      required this.navigationOptions,
-      required this.navigationBuilder,
-      this.withSafeAreaPadding = false})
-      : super(key: key);
+  const MainNavigationFullScreenCarousel({
+    Key? key,
+    required this.navigationOptions,
+    required this.navigationBuilder,
+    this.withSafeAreaPadding = false,
+  }) : super(key: key);
 
   @override
   _MainNavigationFullScreenCarouselState<T> createState() =>
