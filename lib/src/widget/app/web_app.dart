@@ -46,7 +46,9 @@ class _WebAppNavHandlerState extends State<WebAppNavHandler> {
     }
 
     // Skip if the path is an error
-    if (!widget.redirectOnError && path == bloc.lastFailedDeepNavigation) {
+    if (!widget.redirectOnError &&
+        bloc.failedLastNavigation &&
+        path == bloc.lastFailedFullNavigation) {
       return;
     }
 
