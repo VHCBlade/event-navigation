@@ -12,7 +12,8 @@ dependencies:
     sdk: flutter
 
   carousel_slider: ^4.0.0
-  event_bloc: ^1.1.0
+  event_bloc: ^1.1.1
+  universal_html: ^2.0.0
 
 dev_dependencies:
   flutter_test:
