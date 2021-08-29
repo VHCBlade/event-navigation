@@ -27,16 +27,18 @@ class EventNavigation {
         .fireEvent(DEEP_LINK_NAVIGATION_EVENT, deepNavigationString);
   }
 
+  /// TODO Doesn't work yet.
   static void appendDeepNavigation(
       BuildContext context, String addedDeepNavigationString) {
-    BlocEventChannelProvider.of(context)
-        .fireEvent(APPEND_DEEP_NAVIGATION_EVENT, addedDeepNavigationString);
+    throw UnimplementedError();
+    // BlocEventChannelProvider.of(context)
+    //     .fireEvent(APPEND_DEEP_NAVIGATION_EVENT, addedDeepNavigationString);
   }
 
   static void pushDeepNavigation<T>(
-      BuildContext context, T addedDeepNavigationString) {
+      BuildContext context, T addedDeepNavigation) {
     BlocEventChannelProvider.of(context)
-        .fireEvent(PUSH_DEEP_NAVIGATION_EVENT, addedDeepNavigationString);
+        .fireEvent(PUSH_DEEP_NAVIGATION_EVENT, addedDeepNavigation);
   }
 
   static void popDeepNavigation(BuildContext context) {

@@ -22,7 +22,8 @@ class DeepNavigationNode<T> extends Equatable {
 
   /// Creates a copy of this [DeepNavigationNode] with the [newChild].
   DeepNavigationNode<T> setChild(DeepNavigationNode<T>? newChild) =>
-      createCopy(newChild: newChild?.createCopy(newLevel: level + 1));
+      DeepNavigationNode(value,
+          level: level, child: newChild?.createCopy(newLevel: level + 1));
 
   /// Creates a copy of this [DeepNavigationNode] that has [newLeaf] set as the child of the current [leaf].
   DeepNavigationNode<T> setLeaf(DeepNavigationNode<T> newLeaf) {
@@ -32,12 +33,13 @@ class DeepNavigationNode<T> extends Equatable {
     return createCopy(newChild: child!.setLeaf(newLeaf));
   }
 
-  ///
+  /// removes the leaf of this child.
   DeepNavigationNode<T>? removeLeaf() {
     if (child == null) {
       return null;
     }
-    createCopy(newChild: child!.removeLeaf());
+
+    return setChild(child!.removeLeaf());
   }
 
   DeepNavigationNode<T> changeChildAtLevel(

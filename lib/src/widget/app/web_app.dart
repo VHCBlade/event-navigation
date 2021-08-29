@@ -1,7 +1,6 @@
 import 'package:event_bloc/event_bloc.dart';
 import 'package:event_navigation/event_navigation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart';
 
 const _PATH = "/#/";
