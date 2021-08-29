@@ -1,14 +1,7 @@
-# event_navigation
+# Event Navigation
 
-A new Flutter package project.
+A library built on the [event_bloc](https://pub.dev/packages/event_bloc) library. It handles navigation logic that you can base your navigation on.
 
 ## Getting Started
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+TODO
