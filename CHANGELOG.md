@@ -1,3 +1,7 @@
+## 0.1.2
+
+* Added ThemeMode to EventNavigationApp
+
 ## 0.1.1
 
 * Added Description to Readme

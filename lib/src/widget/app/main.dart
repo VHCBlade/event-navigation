@@ -8,14 +8,16 @@ class EventNavigationApp extends StatelessWidget {
   final String title;
   final ThemeData? theme;
   final ThemeData? darkTheme;
+  final ThemeMode? themeMode;
 
-  const EventNavigationApp(
-      {Key? key,
-      required this.child,
-      this.title = '',
-      this.theme,
-      this.darkTheme})
-      : super(key: key);
+  const EventNavigationApp({
+    Key? key,
+    required this.child,
+    this.title = '',
+    this.theme,
+    this.darkTheme,
+    this.themeMode,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class EventNavigationApp extends StatelessWidget {
         title: title,
         theme: theme,
         darkTheme: darkTheme,
+        themeMode: themeMode,
         onGenerateInitialRoutes: (path) =>
             [MaterialPageRoute(builder: (_) => child)],
         onGenerateRoute: (settings) {
