@@ -51,8 +51,15 @@ class _WebAppNavHandlerState extends State<WebAppNavHandler> {
       return;
     }
 
-    window.location.assign(
-        href.substring(0, href.indexOf(_PATH) + _PATH.length) + fullNavigation);
+    final newPath =
+        href.substring(0, href.indexOf(_PATH) + _PATH.length) + fullNavigation;
+
+    Future.delayed(Duration.zero).then((value) {
+      // window.history.pushState(null, "", newPath);
+      window.location.assign(
+          href.substring(0, href.indexOf(_PATH) + _PATH.length) +
+              fullNavigation);
+    });
   }
 
   @override

@@ -1,3 +1,8 @@
+## 0.2.0
+
+* Updated packages to be compatible with Flutter 3!
+* Web Navigation may be broken. This will need to be investigated
+
 ## 0.1.2
 
 * Added ThemeMode to EventNavigationApp
