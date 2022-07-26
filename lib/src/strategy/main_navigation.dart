@@ -36,8 +36,8 @@ class ListNavigationStrategy<T> implements MainNavigationStrategy<T> {
     this.convertToStringFunction,
     this.convertToValueFunction,
   })  : assert(possibleNavigations.isNotEmpty),
-        this.navigationOnError = navigationOnError ?? possibleNavigations[0],
-        this.defaultNavigation = defaultNavigation ?? possibleNavigations[0];
+        navigationOnError = navigationOnError ?? possibleNavigations[0],
+        defaultNavigation = defaultNavigation ?? possibleNavigations[0];
 
   @override
   bool attemptNavigation(T newNavigation) =>

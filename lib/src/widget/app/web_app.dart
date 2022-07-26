@@ -11,11 +11,10 @@ class WebAppNavHandler extends StatefulWidget {
   final bool redirectOnError;
 
   const WebAppNavHandler(
-      {Key? key, required this.child, this.redirectOnError = false})
-      : super(key: key);
+      {super.key, required this.child, this.redirectOnError = false});
 
   @override
-  _WebAppNavHandlerState createState() => _WebAppNavHandlerState();
+  State createState() => _WebAppNavHandlerState();
 }
 
 class _WebAppNavHandlerState extends State<WebAppNavHandler> {
@@ -54,12 +53,7 @@ class _WebAppNavHandlerState extends State<WebAppNavHandler> {
     final newPath =
         href.substring(0, href.indexOf(_PATH) + _PATH.length) + fullNavigation;
 
-    Future.delayed(Duration.zero).then((value) {
-      // window.history.pushState(null, "", newPath);
-      window.location.assign(
-          href.substring(0, href.indexOf(_PATH) + _PATH.length) +
-              fullNavigation);
-    });
+    window.location.assign(newPath);
   }
 
   @override

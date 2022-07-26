@@ -1,8 +1,5 @@
 import 'package:event_bloc/event_bloc.dart';
 import 'package:event_navigation/event_navigation.dart';
-import 'package:event_navigation/src/event.dart';
-import 'package:event_navigation/src/strategy/main_navigation.dart';
-import 'package:event_navigation/src/strategy/navigation_undo.dart';
 
 enum NavigationResult {
   success,

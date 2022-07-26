@@ -1,3 +1,9 @@
+## 0.3.0
+
+* Added Linter (flutter_lints) and udpated code to abide by its guidelines
+* Changed EventNavigationApp from using a child to a builder
+* Fixed Web Navigation - this may require adding an Overlay Widget on top of the builder
+
 ## 0.2.0
 
 * Updated packages to be compatible with Flutter 3!

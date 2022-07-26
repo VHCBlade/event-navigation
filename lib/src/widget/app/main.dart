@@ -1,10 +1,11 @@
+import 'package:event_bloc/event_bloc.dart';
 import 'package:event_navigation/event_navigation.dart';
 import 'package:event_navigation/src/widget/app/web_app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class EventNavigationApp extends StatelessWidget {
-  final Widget child;
+  final Widget Function(BuildContext) builder;
   final String title;
   final ThemeData? theme;
   final ThemeData? darkTheme;
@@ -12,7 +13,7 @@ class EventNavigationApp extends StatelessWidget {
 
   const EventNavigationApp({
     Key? key,
-    required this.child,
+    required this.builder,
     this.title = '',
     this.theme,
     this.darkTheme,
@@ -21,20 +22,56 @@ class EventNavigationApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: title,
-        theme: theme,
-        darkTheme: darkTheme,
-        themeMode: themeMode,
-        onGenerateInitialRoutes: (path) =>
-            [MaterialPageRoute(builder: (_) => child)],
-        onGenerateRoute: (settings) {
-          if (settings.name != null) {
-            EventNavigation.deepNavigate(context, settings.name!.substring(1));
-          }
-          return null;
-        },
-        builder: (_, child) =>
-            kIsWeb ? WebAppNavHandler(child: child!) : child!);
+    return MaterialApp.router(
+      title: title,
+      theme: theme,
+      darkTheme: darkTheme,
+      themeMode: themeMode,
+      routerDelegate: _Delegate(builder, BlocEventChannelProvider.of(context)),
+      routeInformationParser: _Parser(),
+    );
+  }
+}
+
+class _Parser extends RouteInformationParser<Object> {
+  @override
+  Future<Object> parseRouteInformation(
+      RouteInformation routeInformation) async {
+    return routeInformation.location ?? "/";
+  }
+}
+
+class _Delegate extends RouterDelegate<Object> {
+  final Widget Function(BuildContext) builder;
+  final BlocEventChannel eventChannel;
+
+  _Delegate(this.builder, this.eventChannel);
+
+  @override
+  void addListener(VoidCallback listener) {
+    // DO NOTHING
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return kIsWeb
+        ? WebAppNavHandler(child: builder(context))
+        : builder(context);
+  }
+
+  @override
+  Future<bool> popRoute() async {
+    return true;
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    // DO NOTHING
+  }
+
+  @override
+  Future<void> setNewRoutePath(configuration) async {
+    EventNavigation.deepNavigateChannel(
+        eventChannel, '$configuration'.substring(1));
   }
 }

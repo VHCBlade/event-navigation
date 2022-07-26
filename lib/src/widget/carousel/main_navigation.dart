@@ -16,8 +16,7 @@ class MainNavigationFullScreenCarousel<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MainNavigationFullScreenCarouselState<T> createState() =>
-      _MainNavigationFullScreenCarouselState<T>();
+  State createState() => _MainNavigationFullScreenCarouselState<T>();
 }
 
 class _MainNavigationFullScreenCarouselState<T>

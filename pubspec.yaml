@@ -1,10 +1,10 @@
 name: event_navigation
 description: Uses the event_bloc package to create a solution for navigation.
-version: 0.2.0
+version: 0.3.0
 homepage: https://github.com/VHCBlade/event-navigation
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -20,5 +20,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_lints: ^2.0.1
 
 flutter:

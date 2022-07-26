@@ -1,7 +1,7 @@
 import 'package:event_navigation/event_navigation.dart';
 
-Future<bool> _accept<T>(T _, DeepNavigationNode<T>? _a) async => true;
-Future<bool> _deny<T>(T _, DeepNavigationNode<T>? _a) async => false;
+Future<bool> _accept<T>(T _, DeepNavigationNode<T>? a) async => true;
+Future<bool> _deny<T>(T _, DeepNavigationNode<T>? a) async => false;
 
 /// Decides whether a sub navigation will be allowed to go through given the node.
 ///
@@ -14,7 +14,7 @@ abstract class DeepNavigationStrategy<T> {
   const DeepNavigationStrategy();
 
   /// Checks whether the given [subNavigation] should accepted into the [root]. If [root] is null, that means that it's at the base layer.
-  Future<bool> shouldAcceptNavigation<T>(
+  Future<bool> shouldAcceptNavigation(
       T subNavigation, DeepNavigationNode<T>? root);
 }
 
@@ -25,7 +25,7 @@ class FunctionDeepNavigationStrategy<T> implements DeepNavigationStrategy<T> {
   const FunctionDeepNavigationStrategy(this.evaluationFunction);
 
   @override
-  Future<bool> shouldAcceptNavigation<T>(
+  Future<bool> shouldAcceptNavigation(
       T subNavigation, DeepNavigationNode<T>? root) {
     return evaluationFunction(subNavigation, root);
   }
@@ -39,7 +39,7 @@ class DefaultListDeepNavigationStrategy<T>
   DefaultListDeepNavigationStrategy({required this.allowedSubNavigation});
 
   @override
-  Future<bool> shouldAcceptNavigation<T>(
+  Future<bool> shouldAcceptNavigation(
       T subNavigation, DeepNavigationNode? root) async {
     return allowedSubNavigation.contains(subNavigation);
   }

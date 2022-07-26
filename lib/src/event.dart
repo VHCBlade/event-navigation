@@ -23,8 +23,13 @@ class EventNavigation {
   }
 
   static void deepNavigate(BuildContext context, String deepNavigationString) {
-    BlocEventChannelProvider.of(context)
-        .fireEvent(DEEP_LINK_NAVIGATION_EVENT, deepNavigationString);
+    deepNavigateChannel(
+        BlocEventChannelProvider.of(context), deepNavigationString);
+  }
+
+  static void deepNavigateChannel(
+      BlocEventChannel channel, String deepNavigationString) {
+    channel.fireEvent(DEEP_LINK_NAVIGATION_EVENT, deepNavigationString);
   }
 
   /// TODO Doesn't work yet.
