@@ -1,3 +1,7 @@
+## 0.4.0
+
+* Updated event_bloc package to only accept 3.1.0 and above
+
 ## 0.3.1
 
 * Updated event_bloc package to accept 2.0.0 and above as well as 3.0.0 and above

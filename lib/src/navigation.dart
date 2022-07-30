@@ -15,8 +15,6 @@ enum NavigationResult {
 ///
 /// Defaults to home and will change the main navigation to home if it is attempted to change the app to an unknown state.
 class MainNavigationBloc<T> extends Bloc {
-  @override
-  final BlocEventChannel eventChannel;
   final MainNavigationStrategy<T> strategy;
   final NavigationUndoStrategy<T> undoStrategy;
 
@@ -47,12 +45,11 @@ class MainNavigationBloc<T> extends Bloc {
 
   /// [defaultDeepNavigationStrategy] is the strategy used when [deepNavigationStrategyMap] doesn't have a strategy for the [currentMainNavigationStrategy]
   MainNavigationBloc({
-    BlocEventChannel? parentChannel,
+    super.parentChannel,
     required this.strategy,
     required this.undoStrategy,
     this.defaultDeepNavigationStrategy = DeepNavigationStrategy.denyEverything,
-  })  : eventChannel = BlocEventChannel(parentChannel),
-        currentMainNavigation = strategy.defaultNavigation {
+  }) : currentMainNavigation = strategy.defaultNavigation {
     _addMainNavigationListeners();
     _addDeepNavigationListeners();
   }

@@ -1,6 +1,6 @@
 name: event_navigation
 description: Uses the event_bloc package to create a solution for navigation.
-version: 0.3.1
+version: 0.4.0
 homepage: https://github.com/VHCBlade/event-navigation
 
 environment:
@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
 
   carousel_slider: ^4.0.0
-  event_bloc: ">=2.0.0 <4.0.0"
+  event_bloc: ^3.1.0
   equatable: ^2.0.0
   provider: ^6.0.0
   universal_html: ^2.0.0
