@@ -1,3 +1,7 @@
+## 0.5.0
+
+* Changed Deep Navigation to no longer return a future. It causes problems with deep navigation. 
+
 ## 0.4.0
 
 * Updated event_bloc package to only accept 3.1.0 and above

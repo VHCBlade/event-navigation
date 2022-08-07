@@ -76,7 +76,7 @@ class MainNavigationBloc<T> extends Bloc {
   void changeFullNavigation(String newFullNavigation,
       {bool updateBloc = true}) async {
     if (!updateBloc) {
-      changeFullNavigation(newFullNavigation);
+      _changeFullNavigation(newFullNavigation);
       return;
     }
     updateBlocOnFutureChange(
@@ -105,7 +105,7 @@ class MainNavigationBloc<T> extends Bloc {
       return;
     }
 
-    final subNavigationResult = await handleDeepNavigationFromRoot(
+    final subNavigationResult = handleDeepNavigationFromRoot(
         value.skip(1).map((val) => strategy.convertToValue(val)));
 
     if (subNavigationResult != NavigationResult.failed) {
@@ -135,16 +135,14 @@ class MainNavigationBloc<T> extends Bloc {
       defaultDeepNavigationStrategy;
 
   /// Will create a new [DeepNavigationNode] to assign to [currentMainNavigation] that starts from the base layer.
-  Future<NavigationResult> handleDeepNavigationFromRoot(
-      Iterable<T> subNavigations) async {
+  NavigationResult handleDeepNavigationFromRoot(Iterable<T> subNavigations) {
     final deepNavigationStrategy =
         getDeepNavigationStrategy(currentMainNavigation);
 
     DeepNavigationNode<T>? node;
 
     for (final subNavigation in subNavigations) {
-      if (!await deepNavigationStrategy.shouldAcceptNavigation(
-          subNavigation, node)) {
+      if (!deepNavigationStrategy.shouldAcceptNavigation(subNavigation, node)) {
         return NavigationResult.failed;
       }
 
@@ -167,7 +165,7 @@ class MainNavigationBloc<T> extends Bloc {
     final deepNavigationStrategy =
         getDeepNavigationStrategy(currentMainNavigation);
 
-    if (!await deepNavigationStrategy.shouldAcceptNavigation(
+    if (!deepNavigationStrategy.shouldAcceptNavigation(
         value, currentDeepNavigation)) {
       navigateToError(shouldUpdateBloc: shouldUpdateBloc);
       return NavigationResult.failed;
