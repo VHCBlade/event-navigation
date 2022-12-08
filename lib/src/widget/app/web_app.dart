@@ -1,4 +1,4 @@
-import 'package:event_bloc/event_bloc.dart';
+import 'package:event_bloc/event_bloc_widgets.dart';
 import 'package:event_navigation/event_navigation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:universal_html/html.dart';
@@ -25,7 +25,7 @@ class _WebAppNavHandlerState extends State<WebAppNavHandler> {
     final href = window.location.href;
     final path = href.substring(href.indexOf(_PATH) + _PATH.length);
 
-    EventNavigation.deepNavigate(context, path);
+    context.deepNavigate(path);
   }
 
   /// This handles changing the web address when an internal navigation occurs.

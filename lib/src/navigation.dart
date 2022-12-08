@@ -55,19 +55,20 @@ class MainNavigationBloc<T> extends Bloc {
   }
 
   void _addMainNavigationListeners() {
-    eventChannel.addEventListener(MAIN_NAVIGATION_EVENT,
-        BlocEventChannel.simpleListener((val) => changeMainNavigation(val)));
-    eventChannel.addEventListener(DEEP_LINK_NAVIGATION_EVENT,
-        BlocEventChannel.simpleListener((val) => changeFullNavigation(val)));
-    eventChannel.addEventListener(PREVIOUS_MAIN_NAVIGATION_EVENT,
-        BlocEventChannel.simpleListener((_) => undoNavigation()));
+    eventChannel.addEventListener(NavigationEvent.mainNavigation.event,
+        (_, val) => changeMainNavigation(val as T));
+    eventChannel.addEventListener<String>(
+        NavigationEvent.deepLinkNavigation.event,
+        (_, val) => changeFullNavigation(val));
+    eventChannel.addEventListener(NavigationEvent.previousMainNavigation.event,
+        (_, val) => undoNavigation());
   }
 
   void _addDeepNavigationListeners() {
-    eventChannel.addEventListener(POP_DEEP_NAVIGATION_EVENT,
-        BlocEventChannel.simpleListener((_) => popDeepNavigation()));
-    eventChannel.addEventListener(PUSH_DEEP_NAVIGATION_EVENT,
-        BlocEventChannel.simpleListener((val) => pushDeepNavigation(val)));
+    eventChannel.addEventListener(NavigationEvent.popDeepNavigation.event,
+        (_, val) => popDeepNavigation());
+    eventChannel.addEventListener(NavigationEvent.pushDeepNavigation.event,
+        (_, val) => pushDeepNavigation(val as T));
   }
 
   /// Changes the current navigation to be equal to the [newFullNavigation].

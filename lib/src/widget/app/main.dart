@@ -1,4 +1,4 @@
-import 'package:event_bloc/event_bloc.dart';
+import 'package:event_bloc/event_bloc_widgets.dart';
 import 'package:event_navigation/event_navigation.dart';
 import 'package:event_navigation/src/widget/app/web_app.dart';
 import 'package:flutter/foundation.dart';
@@ -27,7 +27,7 @@ class EventNavigationApp extends StatelessWidget {
       theme: theme,
       darkTheme: darkTheme,
       themeMode: themeMode,
-      routerDelegate: _Delegate(builder, BlocEventChannelProvider.of(context)),
+      routerDelegate: _Delegate(builder, context.eventChannel),
       routeInformationParser: _Parser(),
     );
   }
@@ -71,7 +71,6 @@ class _Delegate extends RouterDelegate<Object> {
 
   @override
   Future<void> setNewRoutePath(configuration) async {
-    EventNavigation.deepNavigateChannel(
-        eventChannel, '$configuration'.substring(1));
+    EventNavigation.deepNavigate(eventChannel, '$configuration'.substring(1));
   }
 }

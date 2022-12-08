@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_controller.dart';
-import 'package:event_bloc/event_bloc.dart';
+import 'package:event_bloc/event_bloc_widgets.dart';
 import 'package:event_navigation/event_navigation.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,7 @@ class _MainNavigationFullScreenCarouselState<T>
 
   @override
   Widget build(BuildContext context) {
-    final navBloc = BlocProvider.watch<MainNavigationBloc<T>>(context);
+    final navBloc = context.watchBloc<MainNavigationBloc<T>>();
     final page =
         widget.navigationOptions.indexOf(navBloc.currentMainNavigation);
 

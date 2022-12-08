@@ -1,3 +1,8 @@
+## 0.6.0
+
+* Updated event_bloc to ^4.2.0. This comes with it all the breaking changes introduced in event_bloc 4.0.0.
+* Changed all EventNavigation functions to apply to BlocEventChannels instead. All functions that previously accepted BuildContexts are now in an extension on BuildContext.
+
 ## 0.5.0
 
 * Changed Deep Navigation to no longer return a future. It causes problems with deep navigation. 

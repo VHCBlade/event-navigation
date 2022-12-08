@@ -20,9 +20,7 @@ class MainNavigationButton extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return builder(() => context
-        .read<BlocEventChannel>()
-        .fireEvent(MAIN_NAVIGATION_EVENT, navigation));
+    return builder(() => context.changeMainNavigation(navigation));
   }
 }
 
@@ -56,10 +54,7 @@ class MainNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final index = navigationPossibilities.indexOf(currentNavigation);
-    return builder(max(index, 0), (i) {
-      context
-          .read<BlocEventChannel>()
-          .fireEvent(MAIN_NAVIGATION_EVENT, navigationPossibilities[i]);
-    });
+    return builder(max(index, 0),
+        (i) => context.changeMainNavigation(navigationPossibilities[i]));
   }
 }

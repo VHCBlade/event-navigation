@@ -1,53 +1,81 @@
+import 'package:event_bloc/event_bloc_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:event_bloc/event_bloc.dart';
 
-const MAIN_NAVIGATION_EVENT = 'main-navigation';
-const PREVIOUS_MAIN_NAVIGATION_EVENT = 'previous-main-navigation';
+enum NavigationEvent<T> {
+  mainNavigation<dynamic>(),
+  previousMainNavigation<void>(),
 
-const DEEP_LINK_NAVIGATION_EVENT = 'deep-navigation';
-const APPEND_DEEP_NAVIGATION_EVENT = 'append-navigation';
-const PUSH_DEEP_NAVIGATION_EVENT = 'push-navigation';
-const POP_DEEP_NAVIGATION_EVENT = 'pop-navigation';
+  deepLinkNavigation<String>(),
+  appendDeepNavigation<String>(),
+  pushDeepNavigation<dynamic>(),
+  popDeepNavigation<void>(),
+  ;
 
-/// Helper class that assumes you placed a [MainNavigationBloc]
+  BlocEventType<T> get event => BlocEventType<T>("$this");
+}
+
+/// Helper class that that can fire events into a [BlocEventChannel]
+///
+/// If you are provided with a [BuildContext] you can use one of the extension functions instead.
+/// All functions here have an equivalent in a BuildContext extension.
 class EventNavigation {
   static void changeMainNavigation<T>(
-      BuildContext context, T newMainNavigation) {
-    BlocEventChannelProvider.of(context)
-        .fireEvent(MAIN_NAVIGATION_EVENT, newMainNavigation);
+      BlocEventChannel channel, T newMainNavigation) {
+    channel.fireEvent(NavigationEvent.mainNavigation.event, newMainNavigation);
   }
 
-  static void undoNavigation(BuildContext context) {
-    BlocEventChannelProvider.of(context)
-        .fireEvent(PREVIOUS_MAIN_NAVIGATION_EVENT, null);
+  static void undoNavigation(BlocEventChannel channel) {
+    channel.fireEvent(NavigationEvent.previousMainNavigation.event, null);
   }
 
-  static void deepNavigate(BuildContext context, String deepNavigationString) {
-    deepNavigateChannel(
-        BlocEventChannelProvider.of(context), deepNavigationString);
-  }
-
-  static void deepNavigateChannel(
+  static void deepNavigate(
       BlocEventChannel channel, String deepNavigationString) {
-    channel.fireEvent(DEEP_LINK_NAVIGATION_EVENT, deepNavigationString);
+    channel.fireEvent(
+        NavigationEvent.deepLinkNavigation.event, deepNavigationString);
   }
 
   /// TODO Doesn't work yet.
   static void appendDeepNavigation(
-      BuildContext context, String addedDeepNavigationString) {
+      BlocEventChannel channel, String addedDeepNavigationString) {
     throw UnimplementedError();
     // BlocEventChannelProvider.of(context)
     //     .fireEvent(APPEND_DEEP_NAVIGATION_EVENT, addedDeepNavigationString);
   }
 
   static void pushDeepNavigation<T>(
-      BuildContext context, T addedDeepNavigation) {
-    BlocEventChannelProvider.of(context)
-        .fireEvent(PUSH_DEEP_NAVIGATION_EVENT, addedDeepNavigation);
+      BlocEventChannel channel, T addedDeepNavigation) {
+    channel.fireEvent(
+        NavigationEvent.pushDeepNavigation.event, addedDeepNavigation);
   }
 
-  static void popDeepNavigation(BuildContext context) {
-    BlocEventChannelProvider.of(context)
-        .fireEvent(POP_DEEP_NAVIGATION_EVENT, null);
+  static void popDeepNavigation(BlocEventChannel channel) {
+    channel.fireEvent<void>(NavigationEvent.popDeepNavigation.event, null);
+  }
+}
+
+extension BuildContextNavigation on BuildContext {
+  void changeMainNavigation<T>(T newMainNavigation) {
+    EventNavigation.changeMainNavigation(eventChannel, newMainNavigation);
+  }
+
+  void undoNavigation() {
+    EventNavigation.undoNavigation(eventChannel);
+  }
+
+  void deepNavigate(String deepNavigationString) {
+    EventNavigation.deepNavigate(eventChannel, deepNavigationString);
+  }
+
+  void appendDeepNavigation(String addedDeepNavigationString) {
+    EventNavigation.appendDeepNavigation(
+        eventChannel, addedDeepNavigationString);
+  }
+
+  void pushDeepNavigation<T>(T addedDeepNavigation) {
+    EventNavigation.pushDeepNavigation(eventChannel, addedDeepNavigation);
+  }
+
+  void popDeepNavigation() {
+    EventNavigation.popDeepNavigation(eventChannel);
   }
 }
