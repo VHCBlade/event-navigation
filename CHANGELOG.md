@@ -1,3 +1,8 @@
+## 0.6.2
+
+* Fixed bug where instantiating with any navigation in the MainNavigation carousel other than the first page would cause an animation to play going to the correct navigation page.
+* Changed a call to updateBlocOnFutureChange to updateBlocOnChange instead because a future is not returned.
+
 ## 0.6.1
 
 * Added Append Deep Navigation implementation.

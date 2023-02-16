@@ -22,6 +22,7 @@ class MainNavigationFullScreenCarousel<T> extends StatefulWidget {
 class _MainNavigationFullScreenCarouselState<T>
     extends State<MainNavigationFullScreenCarousel<T>> {
   late final CarouselController controller;
+  bool initial = true;
 
   @override
   void initState() {
@@ -36,7 +37,14 @@ class _MainNavigationFullScreenCarouselState<T>
         widget.navigationOptions.indexOf(navBloc.currentMainNavigation);
 
     if (page >= 0) {
-      Future.delayed(Duration.zero).then((_) => controller.animateToPage(page));
+      Future.delayed(Duration.zero).then((_) {
+        if (initial) {
+          controller.jumpToPage(page);
+        } else {
+          controller.animateToPage(page);
+        }
+        initial = false;
+      });
     }
 
     return FullScreenCarousel(

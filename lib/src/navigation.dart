@@ -83,7 +83,7 @@ class MainNavigationBloc<T> extends Bloc {
       _changeFullNavigation(newFullNavigation);
       return;
     }
-    updateBlocOnFutureChange(
+    updateBlocOnChange(
         change: () => _changeFullNavigation(newFullNavigation),
         tracker: () => [fullNavigation, lastFailedFullNavigation]);
   }
@@ -91,7 +91,7 @@ class MainNavigationBloc<T> extends Bloc {
   /// Changes the current navigation to be equal to the [newFullNavigation].
   ///
   /// Upon failure, will set [lastFailedFullNavigation] to [newFullNavigation].
-  Future<void> _changeFullNavigation(String newFullNavigation) async {
+  void _changeFullNavigation(String newFullNavigation) {
     if (newFullNavigation.isEmpty) {
       newFullNavigation = strategy.convertToString(strategy.defaultNavigation);
     }
