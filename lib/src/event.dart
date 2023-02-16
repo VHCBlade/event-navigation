@@ -34,12 +34,10 @@ class EventNavigation {
         NavigationEvent.deepLinkNavigation.event, deepNavigationString);
   }
 
-  /// TODO Doesn't work yet.
   static void appendDeepNavigation(
       BlocEventChannel channel, String addedDeepNavigationString) {
-    throw UnimplementedError();
-    // BlocEventChannelProvider.of(context)
-    //     .fireEvent(APPEND_DEEP_NAVIGATION_EVENT, addedDeepNavigationString);
+    channel.fireEvent(
+        NavigationEvent.appendDeepNavigation.event, addedDeepNavigationString);
   }
 
   static void pushDeepNavigation<T>(

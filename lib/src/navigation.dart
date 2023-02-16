@@ -69,6 +69,9 @@ class MainNavigationBloc<T> extends Bloc {
         (_, val) => popDeepNavigation());
     eventChannel.addEventListener(NavigationEvent.pushDeepNavigation.event,
         (_, val) => pushDeepNavigation(val as T));
+    eventChannel.addEventListener<String>(
+        NavigationEvent.appendDeepNavigation.event,
+        (_, val) => changeFullNavigation("$fullNavigation/$val"));
   }
 
   /// Changes the current navigation to be equal to the [newFullNavigation].

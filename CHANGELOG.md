@@ -1,3 +1,7 @@
+## 0.6.1
+
+* Added Append Deep Navigation implementation.
+
 ## 0.6.0
 
 * Updated event_bloc to ^4.2.0. This comes with it all the breaking changes introduced in event_bloc 4.0.0.
