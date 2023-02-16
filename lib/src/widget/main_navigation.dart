@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:event_bloc/event_bloc.dart';
 import 'package:event_navigation/event_navigation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 /// Creates a widget that has the ability to change the main navigation of the app.
 ///
