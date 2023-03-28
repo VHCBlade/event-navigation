@@ -1,3 +1,7 @@
+## 0.6.4+1
+
+* Added BlocBackButton to exported functions
+
 ## 0.6.4
 
 * Added Convenience Widget BlocBackButton

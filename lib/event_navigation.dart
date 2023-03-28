@@ -5,6 +5,7 @@ export 'src/event.dart';
 export 'src/deep_navigation.dart';
 
 export 'src/widget/main_navigation.dart';
+export 'src/widget/widget.dart';
 export 'src/widget/carousel/carousel_screen.dart';
 export 'src/widget/carousel/main_navigation.dart';
 
