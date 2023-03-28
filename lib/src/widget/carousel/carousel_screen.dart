@@ -6,6 +6,7 @@ class FullScreenCarousel extends StatefulWidget {
   final List<Widget> items;
   final Function(int)? onManualPageChange;
   final bool withSafeAreaPadding;
+  final bool loop;
 
   const FullScreenCarousel({
     Key? key,
@@ -13,6 +14,7 @@ class FullScreenCarousel extends StatefulWidget {
     this.withSafeAreaPadding = false,
     required this.items,
     this.onManualPageChange,
+    this.loop = false,
   }) : super(key: key);
 
   @override
@@ -36,7 +38,7 @@ class _FullScreenCarouselState extends State<FullScreenCarousel> {
       options: CarouselOptions(
           autoPlay: false,
           viewportFraction: 1,
-          enableInfiniteScroll: false,
+          enableInfiniteScroll: widget.loop,
           height: MediaQuery.of(context).size.height,
           enlargeCenterPage: true,
           onPageChanged: (val, CarouselPageChangedReason reason) {

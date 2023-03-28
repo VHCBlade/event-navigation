@@ -1,3 +1,11 @@
+## 0.6.4
+
+* Added Convenience Widget BlocBackButton
+
+## 0.6.3
+
+* Added Ability to loop FullScreenCarousels
+
 ## 0.6.2
 
 * Fixed bug where instantiating with any navigation in the MainNavigation carousel other than the first page would cause an animation to play going to the correct navigation page.
