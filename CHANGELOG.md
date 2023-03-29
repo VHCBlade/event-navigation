@@ -1,3 +1,7 @@
+## 0.6.5
+
+* Added BlocBackButton levels
+
 ## 0.6.4+1
 
 * Added BlocBackButton to exported functions
