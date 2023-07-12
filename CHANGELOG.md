@@ -1,3 +1,7 @@
+## 0.6.6
+
+* Added fullNavigationOnMainNavigation to MainNavigationBloc
+
 ## 0.6.5
 
 * Added BlocBackButton levels

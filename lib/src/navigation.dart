@@ -35,8 +35,11 @@ class MainNavigationBloc<T> extends Bloc {
 
   /// This is the full navigation expressed as a String. The conversion function is provided by [MainNavigationStrategy]
   String get fullNavigation {
-    final mainNavigationString =
-        strategy.convertToString(currentMainNavigation);
+    return fullNavigationOnMainNavigation(currentMainNavigation);
+  }
+
+  String fullNavigationOnMainNavigation(T mainNavigation) {
+    final mainNavigationString = strategy.convertToString(mainNavigation);
     final subNavigationString = deepNavigationMap[currentMainNavigation]
         ?.convertNodeToString(strategy.convertToString);
 
