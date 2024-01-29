@@ -1,3 +1,8 @@
+## 0.7.0
+
+* Updated to work with the new default web navigation that doesn't include '/#/' in the window location
+* Added replaceNonPaths to WebAppNavHandler to automatically remove default web navigations from the Undo Stack
+
 ## 0.6.6
 
 * Added fullNavigationOnMainNavigation to MainNavigationBloc

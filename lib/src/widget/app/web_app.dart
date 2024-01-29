@@ -8,10 +8,20 @@ const _PATH = "/#/";
 /// Adds NavigationHandling to App
 class WebAppNavHandler extends StatefulWidget {
   final Widget child;
+
+  /// If true, failed navigations will redirect to an error location, thus not being added to the undo stack.
   final bool redirectOnError;
 
-  const WebAppNavHandler(
-      {super.key, required this.child, this.redirectOnError = false});
+  /// If true, if the current location does not contain [_PATH], new navigations will replace the
+  /// current navigation rather than add one to the Undo Stack.
+  final bool replaceNonPaths;
+
+  const WebAppNavHandler({
+    super.key,
+    required this.child,
+    this.redirectOnError = false,
+    this.replaceNonPaths = true,
+  });
 
   @override
   State createState() => _WebAppNavHandlerState();
@@ -23,7 +33,9 @@ class _WebAppNavHandlerState extends State<WebAppNavHandler> {
   void initState() {
     super.initState();
     final href = window.location.href;
-    final path = href.substring(href.indexOf(_PATH) + _PATH.length);
+    final path = href.contains(_PATH)
+        ? href.substring(href.indexOf(_PATH) + _PATH.length)
+        : '';
 
     context.deepNavigate(path);
   }
@@ -34,7 +46,14 @@ class _WebAppNavHandlerState extends State<WebAppNavHandler> {
     super.didChangeDependencies();
     final bloc = BlocProvider.watch<MainNavigationBloc<String>>(context);
 
-    final href = window.location.href;
+    final rawHref = window.location.href;
+    late final String href;
+    if (!rawHref.contains(_PATH)) {
+      href =
+          '${rawHref.endsWith('/') ? rawHref.substring(0, rawHref.length - 1) : rawHref}$_PATH';
+    } else {
+      href = rawHref;
+    }
     final path = href.substring(href.indexOf(_PATH) + _PATH.length);
 
     final fullNavigation = bloc.fullNavigation;
@@ -53,7 +72,11 @@ class _WebAppNavHandlerState extends State<WebAppNavHandler> {
     final newPath =
         href.substring(0, href.indexOf(_PATH) + _PATH.length) + fullNavigation;
 
-    window.location.assign(newPath);
+    if (widget.replaceNonPaths && !rawHref.contains(_PATH)) {
+      window.location.replace(newPath);
+    } else {
+      window.location.assign(newPath);
+    }
   }
 
   @override

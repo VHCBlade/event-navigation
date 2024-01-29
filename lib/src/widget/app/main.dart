@@ -37,7 +37,7 @@ class _Parser extends RouteInformationParser<Object> {
   @override
   Future<Object> parseRouteInformation(
       RouteInformation routeInformation) async {
-    return routeInformation.location ?? "/";
+    return routeInformation.uri.toString();
   }
 }
 
