@@ -1,3 +1,9 @@
+## 0.7.1
+
+* Fixed DeepNavigationNode.changeChildAtLevel to work correctly at getting children other than itself
+* Added DeepNavigationNode.tryChildAtLevel
+* Added Initial Tests for DeepNavigationNode
+
 ## 0.7.0
 
 * Updated to work with the new default web navigation that doesn't include '/#/' in the window location

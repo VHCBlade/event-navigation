@@ -1,6 +1,6 @@
 name: event_navigation
 description: Uses the event_bloc package to create a solution for navigation.
-version: 0.7.0
+version: 0.7.1
 homepage: https://github.com/VHCBlade/event-navigation
 
 environment:

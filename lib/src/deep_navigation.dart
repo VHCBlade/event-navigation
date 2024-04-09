@@ -62,10 +62,27 @@ class DeepNavigationNode<T> extends Equatable {
         newChild: child!.changeChildAtLevel(changeLevel, newChild));
   }
 
+  /// Returns the last descendant of this node, which can be itself if [child] is null.
   DeepNavigationNode<T> get leaf => child?.leaf ?? this;
 
+  /// Returns the descendant of this node with [searchLevel], which can be itself if
+  /// [searchLevel] = [level]
+  ///
+  /// Will error out if [searchLevel] is < [level], which means that [searchLevel] is
+  /// a parent of this.
+  ///
+  /// Will also error out if there is no descendant at [searchLevel]
   DeepNavigationNode<T> getChildAtLevel(int searchLevel) {
-    if (searchLevel > level) {
+    final child = tryChildAtLevel(searchLevel);
+    if (child == null) {
+      throw ArgumentError('No child at $searchLevel');
+    }
+    return child;
+  }
+
+  /// similar to [getChildAtLevel] except will return null if no descendant exists at [searchLevel]
+  DeepNavigationNode<T>? tryChildAtLevel(int searchLevel) {
+    if (searchLevel < level) {
       throw ArgumentError(
           'Cannot get a child of a level higher than my level (Child Level: $searchLevel My Level: $level)!');
     }
@@ -73,9 +90,9 @@ class DeepNavigationNode<T> extends Equatable {
       return this;
     }
     if (child == null) {
-      throw ArgumentError('No child at $searchLevel');
+      return null;
     }
-    return child!.getChildAtLevel(searchLevel);
+    return child!.tryChildAtLevel(searchLevel);
   }
 
   DeepNavigationNode<T> getParentOfChild(DeepNavigationNode<T> child) {
