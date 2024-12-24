@@ -58,23 +58,34 @@ class MainNavigationBloc<T> extends Bloc {
   }
 
   void _addMainNavigationListeners() {
-    eventChannel.addEventListener(NavigationEvent.mainNavigation.event,
-        (_, val) => changeMainNavigation(val as T));
+    eventChannel.addEventListener(
+      NavigationEvent.mainNavigation.event,
+      (_, val) => changeMainNavigation(val as T),
+      allowDynamic: true,
+    );
     eventChannel.addEventListener<String>(
         NavigationEvent.deepLinkNavigation.event,
         (_, val) => changeFullNavigation(val));
-    eventChannel.addEventListener(NavigationEvent.previousMainNavigation.event,
-        (_, val) => undoNavigation());
+    eventChannel.addEventListener<void>(
+      NavigationEvent.previousMainNavigation.event,
+      (_, val) => undoNavigation(),
+    );
   }
 
   void _addDeepNavigationListeners() {
-    eventChannel.addEventListener(NavigationEvent.popDeepNavigation.event,
-        (_, val) => popDeepNavigation());
-    eventChannel.addEventListener(NavigationEvent.pushDeepNavigation.event,
-        (_, val) => pushDeepNavigation(val as T));
+    eventChannel.addEventListener<void>(
+      NavigationEvent.popDeepNavigation.event,
+      (_, val) => popDeepNavigation(),
+    );
+    eventChannel.addEventListener(
+      NavigationEvent.pushDeepNavigation.event,
+      (_, val) => pushDeepNavigation(val as T),
+      allowDynamic: true,
+    );
     eventChannel.addEventListener<String>(
-        NavigationEvent.appendDeepNavigation.event,
-        (_, val) => changeFullNavigation("$fullNavigation/$val"));
+      NavigationEvent.appendDeepNavigation.event,
+      (_, val) => changeFullNavigation("$fullNavigation/$val"),
+    );
   }
 
   /// Changes the current navigation to be equal to the [newFullNavigation].

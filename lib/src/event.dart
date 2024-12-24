@@ -1,4 +1,5 @@
 import 'package:event_bloc/event_bloc_widgets.dart';
+import 'package:event_navigation/event_navigation.dart';
 import 'package:flutter/material.dart';
 
 enum NavigationEvent<T> {
@@ -76,4 +77,9 @@ extension BuildContextNavigation on BuildContext {
   void popDeepNavigation() {
     EventNavigation.popDeepNavigation(eventChannel);
   }
+
+  MainNavigationBloc<T> watchNavigationBloc<T>() =>
+      watchBloc<MainNavigationBloc<T>>();
+  MainNavigationBloc<T> navigationBloc<T>() =>
+      readBloc<MainNavigationBloc<T>>();
 }

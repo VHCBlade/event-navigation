@@ -1,6 +1,8 @@
 ## 0.7.2
 
-* Updated Carousel Controller dependency
+* Updated Carousel Controller dependency to match with new Flutter
+* Updated event listeners to match with stricter requirements
+* Added convenience function to access MainNavigationBloc from BuildContext
 
 ## 0.7.1
 

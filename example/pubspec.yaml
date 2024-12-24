@@ -1,0 +1,25 @@
+name: event_navigation_example
+publish_to: none
+description: Example package for event-navigation
+version: 1.0.0
+
+environment:
+  sdk: ">=2.17.0 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  event_bloc: ^4.2.0
+  event_navigation: 
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.1
+
+flutter:
+  uses-material-design: true
