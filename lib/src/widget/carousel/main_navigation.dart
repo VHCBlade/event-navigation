@@ -21,13 +21,13 @@ class MainNavigationFullScreenCarousel<T> extends StatefulWidget {
 
 class _MainNavigationFullScreenCarouselState<T>
     extends State<MainNavigationFullScreenCarousel<T>> {
-  late final CarouselController controller;
+  late final CarouselSliderController controller;
   bool initial = true;
 
   @override
   void initState() {
     super.initState();
-    controller = CarouselController();
+    controller = CarouselSliderController();
   }
 
   @override

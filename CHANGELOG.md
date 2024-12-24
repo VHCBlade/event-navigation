@@ -1,3 +1,7 @@
+## 0.7.2
+
+* Updated Carousel Controller dependency
+
 ## 0.7.1
 
 * Fixed DeepNavigationNode.changeChildAtLevel to work correctly at getting children other than itself

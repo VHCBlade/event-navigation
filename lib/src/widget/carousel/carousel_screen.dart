@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class FullScreenCarousel extends StatefulWidget {
-  final CarouselController? controller;
+  final CarouselSliderController? controller;
   final List<Widget> items;
   final Function(int)? onManualPageChange;
   final bool withSafeAreaPadding;
@@ -22,12 +22,12 @@ class FullScreenCarousel extends StatefulWidget {
 }
 
 class _FullScreenCarouselState extends State<FullScreenCarousel> {
-  late final CarouselController controller;
+  late final CarouselSliderController controller;
 
   @override
   void initState() {
     super.initState();
-    controller = widget.controller ?? CarouselController();
+    controller = widget.controller ?? CarouselSliderController();
   }
 
   @override
