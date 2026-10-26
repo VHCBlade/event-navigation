@@ -75,3 +75,5 @@ build/
 !**/ios/**/default.perspectivev3
 
 .vscode/
+scripts/
+docs/
