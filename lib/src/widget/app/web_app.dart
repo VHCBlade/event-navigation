@@ -1,12 +1,19 @@
 import 'package:event_bloc/event_bloc_widgets.dart';
-import 'package:event_navigation/event_navigation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:universal_html/html.dart';
+
+import '../../event.dart';
+import '../../navigation.dart';
 
 const _PATH = "/#/";
 
 /// Adds NavigationHandling to App
-class WebAppNavHandler extends StatefulWidget {
+///
+/// [T] must be the type of the [MainNavigationBloc] provided above this widget.
+// TODO(tests): hard to test on the VM (window.location); if the URL logic is
+// extracted into a pure function, test path <-> fullNavigation mapping with a
+// non-String T.
+class WebAppNavHandler<T> extends StatefulWidget {
   final Widget child;
 
   /// If true, failed navigations will redirect to an error location, thus not being added to the undo stack.
@@ -24,10 +31,10 @@ class WebAppNavHandler extends StatefulWidget {
   });
 
   @override
-  State createState() => _WebAppNavHandlerState();
+  State createState() => _WebAppNavHandlerState<T>();
 }
 
-class _WebAppNavHandlerState extends State<WebAppNavHandler> {
+class _WebAppNavHandlerState<T> extends State<WebAppNavHandler<T>> {
   /// This handles changing the navigation based on the value of the url used.
   @override
   void initState() {
@@ -44,7 +51,7 @@ class _WebAppNavHandlerState extends State<WebAppNavHandler> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final bloc = BlocProvider.watch<MainNavigationBloc<String>>(context);
+    final bloc = BlocProvider.watch<MainNavigationBloc<T>>(context);
 
     final rawHref = window.location.href;
     late final String href;

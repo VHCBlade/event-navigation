@@ -4,8 +4,8 @@ description: Example package for event-navigation
 version: 1.0.0
 
 environment:
-  sdk: ">=2.17.0 <4.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=3.2.0 <4.0.0"
+  flutter: ">=3.16.0"
 
 dependencies:
   flutter:

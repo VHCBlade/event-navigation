@@ -1,5 +1,10 @@
 import 'package:event_bloc/event_bloc.dart';
-import 'package:event_navigation/event_navigation.dart';
+
+import 'deep_navigation.dart';
+import 'event.dart';
+import 'strategy/deep_navigation.dart';
+import 'strategy/main_navigation.dart';
+import 'strategy/navigation_undo.dart';
 
 enum NavigationResult {
   success,
@@ -10,6 +15,7 @@ enum NavigationResult {
 /// This [Bloc] handles the main/top level navigation of this app. You can fire events in event.dart or use the functions in [EventNavigation] to call the functions indirectly.
 ///
 /// This uses [MainNavigationStrategy] to decide which main navigations to accept and how to convert the [T] to and from a String.
+/// [T] does not have to be a [String]: by default values are written to the full navigation string with [Object.toString].
 ///
 /// This also uses [deepNavigationStrategyMap] to have a mapping of [DeepNavigationStrategy]s for each individual [MainNavigation] that is allowed in the Bloc.
 ///
@@ -38,9 +44,10 @@ class MainNavigationBloc<T> extends Bloc {
     return fullNavigationOnMainNavigation(currentMainNavigation);
   }
 
+  /// The full navigation, as a String, that [mainNavigation] currently has, including its own deep navigation.
   String fullNavigationOnMainNavigation(T mainNavigation) {
     final mainNavigationString = strategy.convertToString(mainNavigation);
-    final subNavigationString = deepNavigationMap[currentMainNavigation]
+    final subNavigationString = deepNavigationMap[mainNavigation]
         ?.convertNodeToString(strategy.convertToString);
 
     return '$mainNavigationString${subNavigationString ?? ""}';
@@ -91,8 +98,7 @@ class MainNavigationBloc<T> extends Bloc {
   /// Changes the current navigation to be equal to the [newFullNavigation].
   ///
   /// Upon failure, will set [lastFailedFullNavigation] to [newFullNavigation]
-  void changeFullNavigation(String newFullNavigation,
-      {bool updateBloc = true}) async {
+  void changeFullNavigation(String newFullNavigation, {bool updateBloc = true}) {
     if (!updateBloc) {
       _changeFullNavigation(newFullNavigation);
       return;
@@ -104,16 +110,26 @@ class MainNavigationBloc<T> extends Bloc {
 
   /// Changes the current navigation to be equal to the [newFullNavigation].
   ///
+  /// Segments are converted with [MainNavigationStrategy.convertToValue]. A segment
+  /// that converts to null is treated as an unknown navigation.
+  ///
   /// Upon failure, will set [lastFailedFullNavigation] to [newFullNavigation].
   void _changeFullNavigation(String newFullNavigation) {
     if (newFullNavigation.isEmpty) {
       newFullNavigation = strategy.convertToString(strategy.defaultNavigation);
     }
 
-    final value = newFullNavigation.split('/');
+    final segments = newFullNavigation.split('/');
+
+    final mainNavigation = strategy.convertToValue(segments[0]);
+    if (mainNavigation == null) {
+      navigateToError();
+      logFailedNavigation(newFullNavigation);
+      return;
+    }
 
     final mainNavigationResult = changeMainNavigation(
-      strategy.convertToValue(value[0]),
+      mainNavigation,
       logUndo: false,
       shouldUpdateBloc: false,
     );
@@ -123,8 +139,18 @@ class MainNavigationBloc<T> extends Bloc {
       return;
     }
 
-    final subNavigationResult = handleDeepNavigationFromRoot(
-        value.skip(1).map((val) => strategy.convertToValue(val)));
+    final subNavigations = <T>[];
+    for (final segment in segments.skip(1)) {
+      final subNavigation = strategy.convertToValue(segment);
+      if (subNavigation == null) {
+        navigateToError();
+        logFailedNavigation(newFullNavigation);
+        return;
+      }
+      subNavigations.add(subNavigation);
+    }
+
+    final subNavigationResult = handleDeepNavigationFromRoot(subNavigations);
 
     if (subNavigationResult != NavigationResult.failed) {
       return;
@@ -169,17 +195,22 @@ class MainNavigationBloc<T> extends Bloc {
     }
     logSuccessfulNavigation();
 
-    if (deepNavigationMap[currentMainNavigation] == node) {
+    final previous = deepNavigationMap[currentMainNavigation];
+    if (previous == node) {
       return NavigationResult.same;
     }
 
     deepNavigationMap[currentMainNavigation] = node;
+    undoStrategy.logDeepNavigation(currentMainNavigation, previous, node);
 
     return NavigationResult.success;
   }
 
-  Future<NavigationResult> pushDeepNavigation(T value,
-      {bool shouldUpdateBloc = true}) async {
+  /// Adds [value] as the new leaf of the deep navigation of [currentMainNavigation], if the
+  /// [DeepNavigationStrategy] accepts it. Otherwise navigates to the error navigation.
+  ///
+  /// This is synchronous.
+  NavigationResult pushDeepNavigation(T value, {bool shouldUpdateBloc = true}) {
     final deepNavigationStrategy =
         getDeepNavigationStrategy(currentMainNavigation);
 
@@ -189,9 +220,11 @@ class MainNavigationBloc<T> extends Bloc {
       return NavigationResult.failed;
     }
 
-    currentDeepNavigation =
-        currentDeepNavigation?.setLeaf(DeepNavigationNode<T>(value)) ??
-            DeepNavigationNode<T>(value);
+    final previous = currentDeepNavigation;
+    final node = previous?.setLeaf(DeepNavigationNode<T>(value)) ??
+        DeepNavigationNode<T>(value);
+    currentDeepNavigation = node;
+    undoStrategy.logDeepNavigation(currentMainNavigation, previous, node);
 
     if (shouldUpdateBloc) {
       updateBloc();
@@ -202,8 +235,15 @@ class MainNavigationBloc<T> extends Bloc {
   /// Will attempt to pop the deep navigation node of [currentMainNavigation]. If currently at the base layer, this will do nothing.
   void popDeepNavigation() {
     updateBlocOnChange(
-        change: () =>
-            currentDeepNavigation = currentDeepNavigation?.removeLeaf(),
+        change: () {
+          final previous = currentDeepNavigation;
+          if (previous == null) {
+            return;
+          }
+          final node = previous.removeLeaf();
+          currentDeepNavigation = node;
+          undoStrategy.logDeepNavigation(currentMainNavigation, previous, node);
+        },
         tracker: () => [currentDeepNavigation]);
   }
 
@@ -211,13 +251,17 @@ class MainNavigationBloc<T> extends Bloc {
   ///
   /// If [logUndo] is false, the navigation will not be logged in the undo strategy.
   ///
-  /// returns true if the navigation was successful. False otherwise
+  /// If [shouldUpdateBloc] is false, listeners are not notified, including when this
+  /// has to navigate to the error navigation.
+  ///
+  /// returns [NavigationResult.failed] if the navigation was rejected, [NavigationResult.same]
+  /// if it is already the current navigation, and [NavigationResult.success] otherwise.
   NavigationResult changeMainNavigation(T newMainNavigation,
       {bool logUndo = true, bool shouldUpdateBloc = true}) {
     if (!strategy.attemptNavigation(newMainNavigation)) {
       assert(strategy.attemptNavigation(strategy.navigationOnError));
 
-      navigateToError(shouldUpdateBloc: true);
+      navigateToError(shouldUpdateBloc: shouldUpdateBloc);
       return NavigationResult.failed;
     }
 
@@ -237,11 +281,17 @@ class MainNavigationBloc<T> extends Bloc {
     return NavigationResult.success;
   }
 
-  void undoNavigation() => undoStrategy.canUndo()
-      ? changeMainNavigation(undoStrategy.undoNavigation(), logUndo: false)
-      : null;
+  void undoNavigation() {
+    if (!undoStrategy.canUndo()) {
+      return;
+    }
+    changeMainNavigation(undoStrategy.undoNavigation(), logUndo: false);
+  }
 
-  void redoNavigation() => undoStrategy.canRedo()
-      ? changeMainNavigation(undoStrategy.redoNavigation(), logUndo: false)
-      : null;
+  void redoNavigation() {
+    if (!undoStrategy.canRedo()) {
+      return;
+    }
+    changeMainNavigation(undoStrategy.redoNavigation(), logUndo: false);
+  }
 }

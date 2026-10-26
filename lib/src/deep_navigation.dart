@@ -15,10 +15,26 @@ class DeepNavigationNode<T> extends Equatable {
   /// Creates a deep copy of this [DeepNavigationNode] with any of the newValues if provided.
   ///
   /// Note that unlike [setChild], this will add the [newChild] as is.
-  DeepNavigationNode<T> createCopy(
-          {T? newValue, int? newLevel, DeepNavigationNode<T>? newChild}) =>
-      DeepNavigationNode<T>(newValue ?? value,
-          level: newLevel ?? level, child: newChild ?? child?.createCopy());
+  ///
+  /// If [clearChild] is true, the copy will have no child. This is the only way to
+  /// drop the child with this function, since a null [newChild] means "keep the current child".
+  /// [clearChild] cannot be combined with a [newChild].
+  DeepNavigationNode<T> createCopy({
+    T? newValue,
+    int? newLevel,
+    DeepNavigationNode<T>? newChild,
+    bool clearChild = false,
+  }) {
+    assert(
+      !(clearChild && newChild != null),
+      'clearChild cannot be combined with newChild',
+    );
+    return DeepNavigationNode<T>(
+      newValue ?? value,
+      level: newLevel ?? level,
+      child: clearChild ? null : (newChild ?? child?.createCopy()),
+    );
+  }
 
   /// Creates a copy of this [DeepNavigationNode] with the [newChild].
   DeepNavigationNode<T> setChild(DeepNavigationNode<T>? newChild) =>

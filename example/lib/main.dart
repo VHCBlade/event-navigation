@@ -22,7 +22,7 @@ class MainApp extends StatelessWidget {
 class _InnerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return EventNavigationApp(
+    return EventNavigationApp<String>(
       title: 'VHCBlade',
       builder: (_) => Overlay(
         initialEntries: [

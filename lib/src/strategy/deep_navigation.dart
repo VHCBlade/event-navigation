@@ -1,4 +1,4 @@
-import 'package:event_navigation/event_navigation.dart';
+import '../deep_navigation.dart';
 
 bool _accept<T>(T _, DeepNavigationNode<T>? a) => true;
 bool _deny<T>(T _, DeepNavigationNode<T>? a) => false;
@@ -19,7 +19,7 @@ abstract class DeepNavigationStrategy<T> {
 
 /// Will use the [evaluationFunction] passed in the constructor to evaluate the acceptance of the sub navigation.
 class FunctionDeepNavigationStrategy<T> implements DeepNavigationStrategy<T> {
-  final bool Function(T, DeepNavigationNode<T>?) evaluationFunction;
+  final bool Function<T>(T, DeepNavigationNode<T>?) evaluationFunction;
 
   const FunctionDeepNavigationStrategy(this.evaluationFunction);
 

@@ -1,10 +1,16 @@
 import 'package:event_bloc/event_bloc_widgets.dart';
-import 'package:event_navigation/event_navigation.dart';
-import 'package:event_navigation/src/widget/app/web_app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class EventNavigationApp extends StatelessWidget {
+import '../../event.dart';
+import 'web_app.dart';
+
+/// Creates a [MaterialApp.router] that is driven by the [MainNavigationBloc].
+///
+/// [T] must be the type of the [MainNavigationBloc] provided above this widget. It cannot
+/// be inferred, so pass it explicitly, e.g. `EventNavigationApp<String>(...)`. It is used on
+/// web to keep the URL in sync with the bloc.
+class EventNavigationApp<T> extends StatelessWidget {
   final Widget Function(BuildContext) builder;
   final String title;
   final ThemeData? theme;
@@ -27,7 +33,7 @@ class EventNavigationApp extends StatelessWidget {
       theme: theme,
       darkTheme: darkTheme,
       themeMode: themeMode,
-      routerDelegate: _Delegate(builder, context.eventChannel),
+      routerDelegate: _Delegate<T>(builder, context.eventChannel),
       routeInformationParser: _Parser(),
     );
   }
@@ -41,7 +47,7 @@ class _Parser extends RouteInformationParser<Object> {
   }
 }
 
-class _Delegate extends RouterDelegate<Object> {
+class _Delegate<T> extends RouterDelegate<Object> {
   final Widget Function(BuildContext) builder;
   final BlocEventChannel eventChannel;
 
@@ -55,7 +61,7 @@ class _Delegate extends RouterDelegate<Object> {
   @override
   Widget build(BuildContext context) {
     return kIsWeb
-        ? WebAppNavHandler(child: builder(context))
+        ? WebAppNavHandler<T>(child: builder(context))
         : builder(context);
   }
 

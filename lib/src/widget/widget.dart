@@ -1,6 +1,7 @@
 import 'package:event_bloc/event_bloc_widgets.dart';
-import 'package:event_navigation/event_navigation.dart';
 import 'package:flutter/material.dart';
+
+import '../event.dart';
 
 class BlocBackButton extends StatelessWidget {
   final int levels;

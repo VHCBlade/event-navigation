@@ -1,3 +1,33 @@
+## 0.8.0
+
+Breaking changes:
+
+* `EventNavigationApp` and `WebAppNavHandler` are now generic and must be given the main navigation type, e.g. `EventNavigationApp<String>`. Web navigation no longer requires the main navigation type to be a `String`.
+* `MainNavigationButton` and `MainNavigationBar` are now generic and accept any main navigation type instead of only `String`.
+* `MainNavigationStrategy.convertToValue` (and `ListNavigationStrategy.convertToValueFunction`) now return `T?`. Returning null means the segment is not a known navigation and the navigation fails.
+* `MainNavigationBloc.pushDeepNavigation` now returns a `NavigationResult` instead of a `Future<NavigationResult>`.
+* `NavigationUndoStrategy.logDeepNavigation` now accepts null roots.
+* `UndoRedoMainNavigationStrategy` now keeps a full undo/redo history instead of a single step. Added `maxHistory`. Logging a new navigation clears the redo history.
+* Raised the minimum SDK to Dart 3.2 and Flutter 3.16.
+
+Additions:
+
+* Added `disableGesture` to `MainNavigationFullScreenCarousel` and `ignoreGestures` to `FullScreenCarousel`. They stop the user from swiping between pages and are passed down to the `CarouselSlider`.
+* `ListNavigationStrategy` converts path segments back to values by matching against `possibleNavigations`, so enums and other types work without a custom converter.
+* Added `clearChild` to `DeepNavigationNode.createCopy`.
+* Added a real README.
+* Added tests for the navigation bloc, strategies, deep navigation nodes and the navigation and carousel widgets.
+
+Fixes:
+
+* Fixed `fullNavigationOnMainNavigation` using the deep navigation of the current main navigation instead of the one passed in.
+* Fixed `changeMainNavigation` ignoring `shouldUpdateBloc` when navigating to the error navigation.
+* Fixed `withSafeAreaPadding` of `FullScreenCarousel` having no effect.
+* `MainNavigationBloc` now calls `NavigationUndoStrategy.logDeepNavigation` when the deep navigation changes.
+* `MainNavigationFullScreenCarousel` no longer re-animates on unrelated rebuilds and schedules page changes after the frame instead of with a zero delay.
+* `changeFullNavigation` is no longer marked `async`.
+* Replaced imports of the package's own barrel file with relative imports.
+
 ## 0.7.2
 
 * Updated Carousel Controller dependency to match with new Flutter
