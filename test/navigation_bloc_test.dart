@@ -34,8 +34,8 @@ void main() {
   group('changeMainNavigation', () {
     test('starts on the default navigation', () {
       expect(buildBloc().currentMainNavigation, 'home');
-      expect(buildBloc(defaultNavigation: 'blog').currentMainNavigation,
-          'blog');
+      expect(
+          buildBloc(defaultNavigation: 'blog').currentMainNavigation, 'blog');
     });
 
     test('success', () {
@@ -68,9 +68,6 @@ void main() {
 
       expect(undo.canUndo(), isFalse);
     });
-
-    // TODO(tests): shouldUpdateBloc false must not notify listeners, including
-    // on the error path. Needs a way to observe Bloc updates from event_bloc.
   });
 
   group('undo and redo', () {
@@ -277,9 +274,10 @@ void main() {
     });
 
     test('uses the strategy of the current main navigation', () {
-      final bloc = buildBloc(deepStrategy: DeepNavigationStrategy.denyEverything)
-        ..deepNavigationStrategyMap['blog'] =
-            DeepNavigationStrategy.acceptEverything;
+      final bloc =
+          buildBloc(deepStrategy: DeepNavigationStrategy.denyEverything)
+            ..deepNavigationStrategyMap['blog'] =
+                DeepNavigationStrategy.acceptEverything;
 
       bloc.changeMainNavigation('blog');
       expect(bloc.pushDeepNavigation('x'), NavigationResult.success);
@@ -345,8 +343,8 @@ void main() {
           NavigationResult.success);
       expect(undo.deepLogs, hasLength(1));
 
-      expect(bloc.handleDeepNavigationFromRoot(['x', 'y']),
-          NavigationResult.same);
+      expect(
+          bloc.handleDeepNavigationFromRoot(['x', 'y']), NavigationResult.same);
       expect(undo.deepLogs, hasLength(1));
     });
 

@@ -10,9 +10,6 @@ const _PATH = "/#/";
 /// Adds NavigationHandling to App
 ///
 /// [T] must be the type of the [MainNavigationBloc] provided above this widget.
-// TODO(tests): hard to test on the VM (window.location); if the URL logic is
-// extracted into a pure function, test path <-> fullNavigation mapping with a
-// non-String T.
 class WebAppNavHandler<T> extends StatefulWidget {
   final Widget child;
 
