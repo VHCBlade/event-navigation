@@ -76,3 +76,5 @@ build/
 
 .vscode/
 scripts/
+docs/
+*.lock
